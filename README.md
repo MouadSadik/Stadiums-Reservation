@@ -64,15 +64,6 @@ cd stadium-reservation-system
 npm install
 ```
 
-### 3️⃣ Configure environment variables
-
-Create a `.env.local` file at the root with:
-
-```env
-NEXT_PUBLIC_SUPABASE_URL=https://ryuguhrkfncmiabopymy.supabase.co
-NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ5dWd1aHJrZm5jbWlhYm9weW15Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDg4MTc4MTIsImV4cCI6MjA2NDM5MzgxMn0.CP9WHVX2w7KIlaSOpKCLGj435zodgggBFVmYvwT0D6I
-```
-
 Get these values from your **Supabase project dashboard**.
 
 ### 4️⃣ Run the development server
