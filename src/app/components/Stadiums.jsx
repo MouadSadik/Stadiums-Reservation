@@ -2,59 +2,85 @@
 
 import { useEffect, useState } from "react";
 import { supabase } from "../lib/supabaseClient";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
 
-export default function Stadiums() {
-    const [stadiums, setStadiums] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [errorMsg, setErrorMsg] = useState("");
+export default function StadiumList() {
+  const [stadiums, setStadiums] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-    useEffect(() => {
-        async function fetchStadiums() {
-            const { data, error } = await supabase.from("stadiums").select("*");
+  useEffect(() => {
+    async function fetchStadiums() {
+      const { data, error } = await supabase
+        .from("stadiums")
+        .select("*")
+        .order("id", { ascending: false });
 
-            if (error) {
-                console.error(error);
-                setErrorMsg("Erreur lors du chargement des stades.");
-            } else {
-                setStadiums(data);
-            }
-            setLoading(false);
-        }
+      if (error) {
+        console.error("Erreur lors du chargement des stades:", error.message);
+        setStadiums([]);
+      } else {
+        setStadiums(data);
+      }
+      setLoading(false);
+    }
 
-        fetchStadiums();
-    }, []);
+    fetchStadiums();
+  }, []);
 
+  if (loading) {
+    // Affichage des skeletons pendant le chargement
     return (
-        <div className="p-8">
-            <h1 className="text-2xl font-bold mb-4">Bienvenue, Joueur !</h1>
-
-            {loading && <p>Chargement des stades...</p>}
-            {errorMsg && <p className="text-red-500">{errorMsg}</p>}
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                {stadiums.map((stadium) => (
-                    <div
-                        key={stadium.id}
-                        className="border rounded p-4 shadow bg-white"
-                    >
-                        <img
-                            src={stadium.image_url}
-                            alt={stadium.name}
-                            className="w-full h-40 object-cover rounded"
-                        />
-                        <h2 className="text-lg font-semibold">{stadium.name}</h2>
-                        <p className="text-sm text-gray-600">{stadium.location}</p>
-                        <p className="text-sm">{stadium.description}</p>
-
-                        <button
-                            className="mt-2 bg-green-600 text-white py-1 px-3 rounded hover:bg-green-700"
-                            onClick={() => alert(`Réservation pour: ${stadium.name}`)}
-                        >
-                            Reserver
-                        </button>
-                    </div>
-                ))}
-            </div>
-        </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 p-4">
+        {Array.from({ length: 3 }).map((_, i) => (
+          <Card key={i} className="space-y-2">
+            <Skeleton className="h-48 w-full rounded" />
+            <Skeleton className="h-4 w-3/4" />
+            <Skeleton className="h-4 w-1/2" />
+          </Card>
+        ))}
+      </div>
     );
+  }
+
+  return (
+    <div className="p-4">
+      <h1 className="text-2xl font-bold mb-4">Liste des stades</h1>
+
+      {stadiums.length === 0 ? (
+        <p className="text-gray-600">Aucun stade trouvé.</p>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+          {stadiums.map((stadium) => (
+            <Card key={stadium.id} className="overflow-hidden">
+              <div className="w-full h-48 overflow-hidden">
+                {stadium.image_url ? (
+                  <img
+                    src={stadium.image_url}
+                    alt={stadium.name}
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <div className="flex items-center justify-center h-full bg-gray-100 text-gray-400">
+                    Aucune image
+                  </div>
+                )}
+              </div>
+
+              <CardHeader>
+                <CardTitle>{stadium.name}</CardTitle>
+                <CardDescription className="text-sm text-gray-500">
+                  {stadium.location}
+                </CardDescription>
+              </CardHeader>
+
+              <CardContent>
+                <p className="text-gray-700">{stadium.description}</p>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      )}
+    </div>
+  );
 }
