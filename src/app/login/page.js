@@ -50,7 +50,7 @@ export default function AuthPage() {
         }
 
         alert("Inscription réussie !");
-        
+
         if (profileData.role === "proprietaire") {
           router.push("/owner");
         } else {

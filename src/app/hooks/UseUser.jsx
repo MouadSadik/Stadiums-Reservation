@@ -15,7 +15,6 @@ export function useUser() {
       setUser(user);
 
       if (user) {
-        // Hypothétique récupération de données supplémentaires (depuis un profil, par ex.)
         const { data: profile } = await supabase
           .from("profiles")
           .select("name, type")

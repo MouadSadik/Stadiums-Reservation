@@ -28,7 +28,7 @@ export default function Reservation() {
 
   async function handleReservation(stadiumId) {
     if (!reservationDate || !timeSlot) {
-      alert("Merci de remplir la date et le créneau horaire !");
+      alert("Merci de remplir la date et le creneau horaire !");
       return;
     }
 
@@ -36,7 +36,7 @@ export default function Reservation() {
     const playerId = userData?.user?.id;
 
     if (!playerId) {
-      alert("Non connecté !");
+      alert("Non connecte !");
       return;
     }
 
@@ -48,7 +48,7 @@ export default function Reservation() {
     });
 
     if (error) {
-      alert("Erreur lors de la réservation : " + error.message);
+      alert("Erreur lors de la reservation : " + error.message);
     } else {
       alert("Réservation réussie !");
       // Reset
@@ -96,17 +96,17 @@ export default function Reservation() {
                   className="bg-green-600 text-white py-1 px-3 rounded hover:bg-green-700 w-full"
                   onClick={() => handleReservation(stadium.id)}
                 >
-                  Confirmer la réservation
+                  Confirmer la reservation
                 </button>
               </div>
             )}
 
-            <button
+            {/* <button
               className="mt-2 bg-green-600 text-white py-1 px-3 rounded hover:bg-green-700 w-full"
               onClick={() => setSelectedStadium(stadium.id)}
             >
               Réserver
-            </button>
+            </button>*/}
           </div>
         ))}
       </div>

@@ -1,6 +1,6 @@
 import StadiumForm from "./components/StadForm";
 import Link from "next/link";
-import Stadiums from "./components/Stadiums";
+import Stadiums from "./components/StadiumsDash";
 import Reservation from "./components/Reservation";
 import NavBar from "./components/NavBar";
 import Hero from "./components/Hero";

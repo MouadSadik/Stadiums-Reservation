@@ -7,13 +7,14 @@ import PlayerForm from "../components/PlayerForm"
 export default function Home() {
     const [user, setUser] = useState("")
 
-    useEffect(()=>{
-        const sessionUser = supabase.auth.getUser().then(({ data })=>{
+
+    useEffect(() => {
+        const sessionUser = supabase.auth.getUser().then(({ data }) => {
             setUser(data.user)
         })
     }, [])
 
-    if(!user) return <p>Chargement...</p>
+    if (!user) return <p>Chargement...</p>
 
     return (
         <div className="p-8">

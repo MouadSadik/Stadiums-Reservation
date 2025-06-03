@@ -1,7 +1,7 @@
 import Reservation from "../components/Reservation";
 
-export default function Home(){
+export default function Home() {
     return (
-        <Reservation/>
+        <Reservation />
     )
 }

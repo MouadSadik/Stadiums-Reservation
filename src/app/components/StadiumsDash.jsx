@@ -2,8 +2,15 @@
 
 import { useEffect, useState } from "react";
 import { supabase } from "../lib/supabaseClient";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Button } from "@/components/ui/button";
 
 export default function StadiumList() {
   const [stadiums, setStadiums] = useState([]);
@@ -11,9 +18,22 @@ export default function StadiumList() {
 
   useEffect(() => {
     async function fetchStadiums() {
+      const {
+        data: { user },
+        error: userError,
+      } = await supabase.auth.getUser();
+
+      if (userError || !user) {
+        console.error("Erreur utilisateur :", userError?.message);
+        setStadiums([]);
+        setLoading(false);
+        return;
+      }
+
       const { data, error } = await supabase
         .from("stadiums")
         .select("*")
+        .eq("owner_id", user.id) // Filtrage des stades par propriétaire
         .order("id", { ascending: false });
 
       if (error) {
@@ -22,6 +42,7 @@ export default function StadiumList() {
       } else {
         setStadiums(data);
       }
+
       setLoading(false);
     }
 
@@ -29,7 +50,6 @@ export default function StadiumList() {
   }, []);
 
   if (loading) {
-    // Affichage des skeletons pendant le chargement
     return (
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 p-4">
         {Array.from({ length: 3 }).map((_, i) => (
@@ -45,10 +65,11 @@ export default function StadiumList() {
 
   return (
     <div className="p-4">
-      <h1 className="text-2xl font-bold mb-4">Liste des stades</h1>
+      <h1 className="text-2xl font-bold mb-4">Mes Stades </h1>
+
 
       {stadiums.length === 0 ? (
-        <p className="text-gray-600">Aucun stade trouvé.</p>
+        <p className="text-gray-600">Vous n'avez ajouté aucun stade.</p>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
           {stadiums.map((stadium) => (
@@ -81,6 +102,8 @@ export default function StadiumList() {
           ))}
         </div>
       )}
+
+
     </div>
   );
 }

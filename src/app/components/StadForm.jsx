@@ -17,18 +17,14 @@ export default function StadiumForm({ ownerId }) {
 
     async function uploadImage(file) {
         const fileName = `${Date.now()}-${file.name}`;
-        const { data, error } = await supabase.storage
-            .from("stadium-images")
-            .upload(fileName, file);
+        const { data, error } = await supabase.storage.from("stadium-images").upload(fileName, file);
 
         if (error) {
             throw new Error("Erreur lors de l'upload: " + error.message);
         }
 
         // Obtenir l'URL publique
-        const { data: publicUrlData } = await supabase.storage
-            .from("stadium-images")
-            .getPublicUrl(fileName);
+        const { data: publicUrlData } = await supabase.storage.from("stadium-images").getPublicUrl(fileName);
 
         if (!publicUrlData?.publicUrl) {
             throw new Error("Impossible de récupérer l'URL publique.");
@@ -44,7 +40,7 @@ export default function StadiumForm({ ownerId }) {
         setSuccessMsg("");
 
         if (!ownerId) {
-            setErrorMsg("Identifiant propriétaire manquant.");
+            setErrorMsg("Identifiant proprietaire manquant.");
             setLoading(false);
             return;
         }
